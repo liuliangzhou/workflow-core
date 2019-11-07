@@ -7,13 +7,14 @@ namespace WorkflowCore.Primitives
 {
     public class Schedule : ContainerStepBody
     {
-        public TimeSpan Interval { get; set; }
+        public long Interval { get; set; }
 
         public override ExecutionResult Run(IStepExecutionContext context)
         {
             if (context.PersistenceData == null)
             {
-                return ExecutionResult.Sleep(Interval, new SchedulePersistenceData() { Elapsed = false });
+                TimeSpan Intervals = new DateTime(Interval) - DateTime.Now;
+                return ExecutionResult.Sleep(Intervals, new SchedulePersistenceData() { Elapsed = false });
             }
             
             if (context.PersistenceData is SchedulePersistenceData)
